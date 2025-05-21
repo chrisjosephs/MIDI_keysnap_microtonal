@@ -7,7 +7,7 @@ Originally developed by **Philip S. Considine** and extended by **Christopher Jo
 ## ✨ Features
 
 - Snap or remap MIDI notes to custom microtonal scales
-- Supports any EDO tuning system (e.g. 19-EDO, 31-EDO, etc.)
+- Supports any EDO tuning system (e.g. 19-EDO, 31-EDO, etc.), or totally arbitrary/non octave scales
 - Load scale files with EDO + step definitions
 - Two modes: **Block** (ignore out-of-scale notes) or **Remap** (force to nearest valid step)
 - Select root MIDI note and channel
@@ -29,6 +29,7 @@ Each scale `.txt` file is a plain text file structured like this:
 - The **first line** indicates the number of steps in the EDO (e.g., 31-EDO)
 - The **remaining lines** define which EDO steps are active in the scale.
 
+You could use non EDO or arbitrary scales by for example setting the first line to 128, and covering every single step you want active.
 ## 📂 Installation
 
 1. Copy the JSFX script into your REAPER `Effects` folder (e.g. `REAPER/Effects/tuning/midi_keysnap_microtonal/`)
