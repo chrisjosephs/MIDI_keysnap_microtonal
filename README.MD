@@ -2,7 +2,7 @@
 
 This is a modified JSFX MIDI tool for REAPER that lets you **snap incoming MIDI notes to a microtonal scale**, supporting custom **EDO (Equal Division of the Octave)** systems.
 
-Originally developed by **Philip S. Considine** and extended by **Christopher Josephs**, this version introduces enhanced microtonal tuning support with scalable, modular `.scale` files.
+Originally developed by **Philip S. Considine** and extended by **Christopher Josephs**, this version introduces enhanced microtonal tuning support with scalable, modular scale '.txt' files.
 
 ## ✨ Features
 
@@ -15,17 +15,18 @@ Originally developed by **Philip S. Considine** and extended by **Christopher Jo
 
 ## 🔧 Scale File Format
 
-Each `.scale` file is a plain text file structured like this:
-31 # Number of steps in the EDO (e.g., 31-EDO)
-0 # Scale step indices
-5
-10
-13
-18
-23
-28
+Each scale `.txt` file is a plain text file structured like this:
 
-- The **first line** indicates the number of steps in the EDO.
+31  
+0  
+5  
+10  
+13  
+18  
+23  
+28  
+
+- The **first line** indicates the number of steps in the EDO (e.g., 31-EDO)
 - The **remaining lines** define which EDO steps are active in the scale.
 
 ## 📂 Installation
