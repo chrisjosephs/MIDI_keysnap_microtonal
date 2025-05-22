@@ -1,4 +1,4 @@
-/*******************************************************************************
+ /*******************************************************************************
 *  Copyright 2007 - 2011, Philip S. Considine                                  *
 *  Modified by: Christopher Josephs                                            *
 *  This program is free software: you can redistribute it and/or modify        *
@@ -39,7 +39,7 @@ out_pin:none
 inputTracker = 0;
 noteMap = 128;
 scale = 1024;
-edoSteps = 128;
+edoSteps = 2048;
 
 // MIDI constants
 statNoteOn = $x90;
@@ -71,10 +71,12 @@ scaleFile != slider5 ?
   (
     file_var(fileHandle, edoSteps); // First line is the number of steps in the EDO (e.g., 31)
 
-    (
-      file_var(fileHandle, scale[scaleSize]);
-      file_avail(fileHandle) ? scaleSize += 1;
-    );
+    // Loop to read the rest of the scale
+      while (file_avail(fileHandle)) // Keep looping as long as there's data left
+      (
+        file_var(fileHandle, scale[scaleSize]); // Read the next value
+        scaleSize += 1; // Increment scaleSize for the next element
+      );
     file_close(fileHandle);
   ) : scaleFile = -1;
 );
