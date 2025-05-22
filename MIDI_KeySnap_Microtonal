@@ -146,7 +146,7 @@ while
                   inputTracker[note] = 2; // Mark note as active and modified
 
                   // Map to nearest good note
-                  nearest + root >= 11 ? octave -= 1;
+                  nearest + root >= edoSteps - 1 ? octave -= 1;
                   noteMap[note] = (octave * edoSteps) + nearest + root;
 
                   // Modify MIDI message data
