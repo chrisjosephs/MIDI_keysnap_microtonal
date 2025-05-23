@@ -29,8 +29,8 @@ Each scale `.txt` file is a plain text file structured like this:
 - The **first line** indicates the number of steps in the EDO (e.g., 31-EDO)
 - The **remaining lines** define which EDO steps are active in the scale.
 
-You could use non EDO or arbitrary scales by for example setting the first line to 128, and covering every single step you want active.
-## 📂 Installation
+You could use non EDO, non octave or arbitrary scales with this by for example setting the first, non octave line to 127, and co with thisvering every single step you want active.
+##7📂 Installation
 
 1. Copy the JSFX script into your REAPER `Effects` folder (e.g. `REAPER/Effects/tuning/midi_keysnap_microtonal/`)
 2. Create a `scales` folder alongside it and store your scale `.txt` files there
