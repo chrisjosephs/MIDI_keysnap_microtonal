@@ -12,7 +12,6 @@
 * GNU General Public License (http://www.gnu.org/licenses/)for more details.*
 *******************************************************************************/
 
-desc: MIDI Snap To Key Microtonal [original by IXix - microtonal support added by crimzonclotta]
 desc: MIDI Snap To Key Microtonal [by IXix w/microtonal support added by crimzonclotta]
 //tags: MIDI processing mapping
 //author: IXix, crimzonclotta
@@ -136,44 +135,50 @@ while
               relNote_for_mapping = relative_note_from_root % edoSteps;
 
               // Ensure relNote_for_mapping is always positive (0 to edoSteps - 1).
-              relative_note_from_root < 0 ? (relNote_for_mapping = edoSteps - relNote_for_mapping);
-
+              relNote_for_blocking = relNote_for_mapping;
+              relative_note_from_root < 0 ? (relNote_for_blocking = edoSteps - relNote_for_mapping);
+              relNote_for_mapping < 0 ? relNote_for_mapping += edoSteps;
               // Is it in key (i.e., is relNote_for_mapping one of the defined scale steps)?
               i = okay = 0;
               while
               (
-                relNote_for_mapping == scale[i] ? okay = 1;
+                relNote_for_blocking == scale[i] ? okay = 1;
                 (i += 1) < scaleSize; // Loop while 'i' is a valid index
               );
 
               okay == 0 ? // Bad note (not in key)
               (
-                mode == 1 ? // Remap mode: snap to nearest in-key step
+                mode == 1 ? // Remap mode
                 (
-                  nearest = difference = 1000;
+                  nearest = -1;
+                  minDistance = 1000;
+
+                  relNote = note - root;
+
                   i = 0;
-                  while
+                  while (i < scaleSize)
                   (
-                    temp = abs(scale[i] - relNote_for_mapping); // Compare to the current scale step
-                    temp < difference ?
+                    // Scan across multiple octaves of the scale (±3)
+                    offset = -3;
+                    while (offset <= 3)
                     (
-                      difference = temp;
-                      nearest = scale[i]; // 'nearest' is the target scale step
+                      candidate = root + (offset * edoSteps) + scale[i];
+                      dist = abs(candidate - note);
+                      dist < minDistance ? (
+                        minDistance = dist;
+                        nearest = candidate;
+                      );
+                      offset += 1;
                     );
-                    (i += 1) < scaleSize; // Loop while 'i' is a valid index
+                    i += 1;
+                  );
+                  nearest == -1 ? (
+                    nearest = root + scale[0]; // Default to lowest in-scale note
                   );
 
-                  inputTracker[note] = 2; // Mark note as active and modified
-
-                  // Calculate the final mapped MIDI note:
-                  // 1. (octave_offset * edoSteps): This gets the base MIDI value of the target octave,
-                  //    relative to the root. (e.g., if root is 60 and octave_offset is 1, this is 31)
-                  // 2. + nearest: Add the target scale step within that relative octave.
-                  // 3. + root: Shift back to the absolute MIDI note number.
-                  noteMap[note] = (octave_offset * edoSteps) + nearest + root;
-
-                  // Modify MIDI message data
-                  msg23 = noteMap[note] | (velocity << 8);
+                  inputTracker[note] = 2;
+                  noteMap[note] = nearest;
+                  msg23 = nearest | (velocity << 8); // Modify MIDI data
                 )
                 : // Block mode: do not pass this note
                 (
@@ -219,3 +224,4 @@ while
     1; // Force loop to continue until all messages have been processed
   );
 );
+
