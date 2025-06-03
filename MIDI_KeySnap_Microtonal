@@ -16,7 +16,7 @@ desc: MIDI Snap To Key Microtonal [original by IXix - microtonal support added b
 desc: MIDI Snap To Key Microtonal [by IXix w/microtonal support added by crimzonclotta]
 //tags: MIDI processing mapping
 //author: IXix, crimzonclotta
-slider1:0<0,15,1{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}>Input Channel
+slider1:0<0,16,1{All, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}>Input Channel
 
 slider2:0<0,127,1>Note Min
 slider3:127<0,127,1>Note Max
@@ -105,7 +105,7 @@ while
     channel = msg1 & $x0F;
 
     // Is it on our channel and are we working?
-    channel == inChannel && on ?
+    (channel == inChannel && on) || inChannel == 0  ?
     (
       // Is it a note event?
       (status == statNoteOn || status == statNoteOff) ?
@@ -136,7 +136,7 @@ while
               relNote_for_mapping = relative_note_from_root % edoSteps;
 
               // Ensure relNote_for_mapping is always positive (0 to edoSteps - 1).
-              relNote_for_mapping < 0 ? relNote_for_mapping += edoSteps;
+              relative_note_from_root < 0 ? (relNote_for_mapping = edoSteps - relNote_for_mapping);
 
               // Is it in key (i.e., is relNote_for_mapping one of the defined scale steps)?
               i = okay = 0;
